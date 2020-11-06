@@ -1,0 +1,4 @@
+create icon
+import videoplayer in Pyside
+Create filters in interface (for quality, sound/video, output extension)
+create progressbar while downloading
