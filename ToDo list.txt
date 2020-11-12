@@ -1,3 +1,2 @@
 ajustar player para após o download
 create progressbar while downloading
-tirar '?' do dialog
