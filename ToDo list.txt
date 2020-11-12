@@ -1,3 +1,3 @@
-import videoplayer in Pyside
-Create filters in interface (for quality, sound/video, output extension)
+ajustar player para após o download
 create progressbar while downloading
+tirar '?' do dialog

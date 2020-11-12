@@ -76,6 +76,74 @@
          </property>
         </widget>
        </item>
+       <item row="6" column="1">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Filters</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="rb_all">
+            <property name="text">
+             <string>All</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_144">
+            <property name="text">
+             <string>144p</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_240">
+            <property name="text">
+             <string>240p</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_360">
+            <property name="text">
+             <string>360p</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_480">
+            <property name="text">
+             <string>480p</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_720">
+            <property name="text">
+             <string>720p</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rb_1080">
+            <property name="text">
+             <string>1080p</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="cb_audio">
+            <property name="text">
+             <string>Audio Only</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>

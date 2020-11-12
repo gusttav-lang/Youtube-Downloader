@@ -79,6 +79,54 @@ class Ui_MainWindow(object):
 
         self.formLayout.setWidget(2, QFormLayout.LabelRole, self.label_2)
 
+        self.groupBox = QGroupBox(self.gb_inputs)
+        self.groupBox.setObjectName(u"groupBox")
+        self.horizontalLayout_3 = QHBoxLayout(self.groupBox)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.rb_all = QRadioButton(self.groupBox)
+        self.rb_all.setObjectName(u"rb_all")
+        self.rb_all.setChecked(True)
+
+        self.horizontalLayout_3.addWidget(self.rb_all)
+
+        self.rb_144 = QRadioButton(self.groupBox)
+        self.rb_144.setObjectName(u"rb_144")
+
+        self.horizontalLayout_3.addWidget(self.rb_144)
+
+        self.rb_240 = QRadioButton(self.groupBox)
+        self.rb_240.setObjectName(u"rb_240")
+
+        self.horizontalLayout_3.addWidget(self.rb_240)
+
+        self.rb_360 = QRadioButton(self.groupBox)
+        self.rb_360.setObjectName(u"rb_360")
+
+        self.horizontalLayout_3.addWidget(self.rb_360)
+
+        self.rb_480 = QRadioButton(self.groupBox)
+        self.rb_480.setObjectName(u"rb_480")
+
+        self.horizontalLayout_3.addWidget(self.rb_480)
+
+        self.rb_720 = QRadioButton(self.groupBox)
+        self.rb_720.setObjectName(u"rb_720")
+
+        self.horizontalLayout_3.addWidget(self.rb_720)
+
+        self.rb_1080 = QRadioButton(self.groupBox)
+        self.rb_1080.setObjectName(u"rb_1080")
+
+        self.horizontalLayout_3.addWidget(self.rb_1080)
+
+        self.cb_audio = QCheckBox(self.groupBox)
+        self.cb_audio.setObjectName(u"cb_audio")
+
+        self.horizontalLayout_3.addWidget(self.cb_audio)
+
+
+        self.formLayout.setWidget(6, QFormLayout.FieldRole, self.groupBox)
+
 
         self.verticalLayout.addWidget(self.gb_inputs)
 
@@ -115,5 +163,14 @@ class Ui_MainWindow(object):
         self.btn_preview.setText(QCoreApplication.translate("MainWindow", u"Preview", None))
         self.btn_download.setText(QCoreApplication.translate("MainWindow", u"Download", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Directory output:", None))
+        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Filters", None))
+        self.rb_all.setText(QCoreApplication.translate("MainWindow", u"All", None))
+        self.rb_144.setText(QCoreApplication.translate("MainWindow", u"144p", None))
+        self.rb_240.setText(QCoreApplication.translate("MainWindow", u"240p", None))
+        self.rb_360.setText(QCoreApplication.translate("MainWindow", u"360p", None))
+        self.rb_480.setText(QCoreApplication.translate("MainWindow", u"480p", None))
+        self.rb_720.setText(QCoreApplication.translate("MainWindow", u"720p", None))
+        self.rb_1080.setText(QCoreApplication.translate("MainWindow", u"1080p", None))
+        self.cb_audio.setText(QCoreApplication.translate("MainWindow", u"Audio Only", None))
     # retranslateUi
 
