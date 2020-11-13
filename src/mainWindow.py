@@ -3,6 +3,8 @@ from src.ui.mainWindow_ui import Ui_MainWindow
 from pytube import YouTube
 from VideoPlayer import VideoPlayer
 from downloadList import DownloadList
+from PySide2.QtCore import QThread
+from StreamLoader import StreamLoader
 
 
 class MainWindow(QMainWindow):
@@ -20,7 +22,7 @@ class MainWindow(QMainWindow):
         self.resolution = None
         self.audio_only = None
         self.ui.le_url.textChanged.connect(self.set_url)
-        self.ui.le_url.textChanged.connect(self.set_output)
+        self.ui.le_output.textChanged.connect(self.set_output)
         self.ui.rb_144.toggled.connect(self.quality_filter_changed)
         self.ui.rb_240.toggled.connect(self.quality_filter_changed)
         self.ui.rb_360.toggled.connect(self.quality_filter_changed)
@@ -31,12 +33,18 @@ class MainWindow(QMainWindow):
         self.ui.cb_audio.stateChanged.connect(self.audio_olny_changed)
         
     def download(self):
-        yt = YouTube(self.url).streams.filter(resolution=self.resolution, only_audio=self.audio_only)
-        print(type(yt))
-        download_dialog = DownloadList(yt)
+        download_thread = QThread()
+        
+        yt = YouTube(self.url)
+        download_dialog = DownloadList(yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only))
         download_dialog.exec_()
-        #YouTube(url).streams[0].download(output)
-    
+        
+        item_for_download = download_dialog.currentItem
+        yt.register_on_progress_callback(self.show_progress_bar)    
+        
+        yt.moveToThread(download_thread)
+        yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only)[item_for_download].download(self.output)
+        
     def preview(self):
         newWidget = VideoPlayer(self.url)
         self.ui.sw_player.addWidget(newWidget)
@@ -48,7 +56,7 @@ class MainWindow(QMainWindow):
         self.ui.le_output.setText(dir)
 
     def check_url_is_valid(self):
-        pass # funtions donwload and preview will use it
+        pass # functions donwload and preview will use it
 
     def set_url(self, text : str):
         self.url = text
@@ -71,13 +79,13 @@ class MainWindow(QMainWindow):
             self.resolution = '1080p'
         elif (self.ui.rb_all.isChecked()):
             self.resolution = None
-        print(self.resolution)
     
     def audio_olny_changed(self):
         if (self.ui.cb_audio.isChecked()):
             self.audio_only = True
         else:
-            self.audio_only = None # just cancel this filter
+            self.audio_only = None # just cancel this filter          
             
-        print(self.audio_only)
+    def show_progress_bar(stream, chunk, file_handler, bytes_remaining):
+        print('aqui')
     

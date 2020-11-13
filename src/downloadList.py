@@ -10,3 +10,11 @@ class DownloadList(QDialog):
             list_item = QListWidgetItem()
             list_item.setText(str(videos_list[i]))
             self.ui.listWidget.addItem(list_item)
+        
+        self.ui.listWidget.setCurrentRow(0)
+        self.ui.btn_download.clicked.connect(self.download)
+        self.currentItem = 0
+        
+    def download(self):
+        self.currentItem =self.ui.listWidget.currentRow()
+        self.close()
