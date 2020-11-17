@@ -1,2 +1,9 @@
 ajustar player para após o download
 create progressbar while downloading
+escrever documentação
+
+validar:
+-lista vazia antes do download
+-url valida
+-output valido
+-arquivo existe no output

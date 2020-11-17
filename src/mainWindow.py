@@ -31,34 +31,33 @@ class MainWindow(QMainWindow):
         self.ui.rb_all.toggled.connect(self.resolution_filter_changed)
         self.ui.cb_audio.stateChanged.connect(self.audio_olny_changed)
         
-        self.download_thread = QThread()        
-        self.progress_dialog = QProgressDialog()   
-        self.progress_dialog.hide()
+        self.download_thread = QThread()
+        self.progress_dialog = None
+        self.yt = None
+        self.ui.le_output.setText('C:/Users/gustt/OneDrive/Área de Trabalho') # apagar dps
+        self.ui.le_url.setText('https://www.youtube.com/watch?v=R5INkznXiEs&ab_channel=MaellMemes')
         
     def download(self):        
-        yt = StreamLoader(self.url)
-        download_dialog = DownloadList(yt.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only))
+        self.yt = StreamLoader(self.url)
+        download_dialog = DownloadList(self.yt.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only))
         download_dialog.exec_()
         
-        item_for_download = download_dialog.currentItem
-        yt.yt.register_on_progress_callback(yt.show_progress_bar)    
+        item_for_download = download_dialog.currentItem                
         
-        #temp:        
-        yt.total_bytes.connect(self.print_bytes)
-        yt.bytes_remaining.connect(self.print_bytes)
-        
-        
-        yt.set_resolution(self.resolution)
-        yt.set_audio_only(self.audio_only)
-        yt.set_output(self.output)
-        yt.set_item_for_download(item_for_download)
+        self.yt.set_resolution(self.resolution)
+        self.yt.set_audio_only(self.audio_only)
+        self.yt.set_output(self.output)
+        self.yt.set_item_for_download(item_for_download)
         
         
-        yt.moveToThread(self.download_thread)
-        self.download_thread.started.connect(yt.start_thread)         
+        self.progress_dialog = QProgressDialog() 
+        self.yt.moveToThread(self.download_thread)
+        self.download_thread.started.connect(self.yt.start_thread)  
+        self.yt.finished.connect(self.download_thread.quit)
+        self.yt.yt.register_on_progress_callback(self.yt.show_progress_bar)          
         self.progress_dialog.setLabelText('Downloading')
-        yt.total_bytes.connect(self.progress_dialog.setMaximum)
-        yt.bytes_remaining.connect(self.progress_dialog.setValue)
+        self.yt.total_bytes.connect(self.progress_dialog.setMaximum)
+        self.yt.bytes_remaining.connect(self.progress_dialog.setValue)
         self.progress_dialog.show()
         
         self.download_thread.start()
@@ -102,20 +101,7 @@ class MainWindow(QMainWindow):
         if (self.ui.cb_audio.isChecked()):
             self.audio_only = True
         else:
-            self.audio_only = None # just cancel this filter          
+            self.audio_only = None # just cancel this filter         
    
-    '''def show_progress_bar(stream, chunk, file_handler, bytes_remaining):
-        if (is_first[0]):
-            progress_dialog[0] = QProgressDialog()
-            progress_dialog[0].setLabelText('Downloading')
-            total_bytes[0] = bytes_remaining
-            progress_dialog[0].setRange(0, bytes_remaining)
-            progress_dialog[0].show()
-            is_first[0] = False
-            print(is_first[0])
-        progress_dialog[0].setValue(total_bytes[0] - bytes_remaining)'''
-        
-    def print_bytes(self, inteiro):
-        print(inteiro)
-        
+       
     

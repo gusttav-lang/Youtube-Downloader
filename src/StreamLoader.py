@@ -5,6 +5,7 @@ from pytube import YouTube
 class StreamLoader(QObject):
     total_bytes = Signal(int)
     bytes_remaining = Signal(int)
+    finished = Signal()
     
     def __init__(self, url : str):
         super().__init__()
@@ -14,6 +15,7 @@ class StreamLoader(QObject):
         self.item_for_download = 0
         self.output = ''
         self.is_first = True
+        self.file_size = 0
         
     def set_resolution(self, resolution):
         self.resolution = resolution
@@ -30,10 +32,12 @@ class StreamLoader(QObject):
     def start_thread(self):
         self.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only)[self.item_for_download].download(self.output)
         
-    def show_progress_bar(self, stream, chunk, file_handler, bytes_remaining):
+    def show_progress_bar(self, stream, chunk, bytes_remaining):
         if (self.is_first):
             self.total_bytes.emit(bytes_remaining)
+            self.file_size = bytes_remaining
             self.is_first = False
-        self.bytes_remainig.emit(bytes_remaining)
-        
+        self.bytes_remaining.emit(self.file_size - bytes_remaining)
+        if (bytes_remaining == 0):
+            self.finished.emit()
     
