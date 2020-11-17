@@ -10,27 +10,27 @@ class StreamLoader(QObject):
     def __init__(self, url : str):
         super().__init__()
         self.yt = YouTube(url)
-        self.resolution = None
-        self.audio_only = None
-        self.item_for_download = 0
-        self.output = ''
+        self.__resolution = None
+        self.__audio_only = None
+        self.__item_for_download = 0
+        self.__output = ''
         self.is_first = True
         self.file_size = 0
         
     def set_resolution(self, resolution):
-        self.resolution = resolution
+        self.__esolution = resolution
         
     def set_audio_only(self, audio_only):
-        self.audio_only = audio_only
+        self.__audio_only = audio_only
     
     def set_item_for_download(self, item_for_download):
-        self.item_for_download = item_for_download
+        self.__item_for_download = item_for_download
         
     def set_output(self, output):
-        self.output = output
+        self.__output = output
     
     def start_thread(self):
-        self.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only)[self.item_for_download].download(self.output)
+        self.yt.streams.filter(resolution=self.__resolution, only_audio=self.__audio_only)[self.__item_for_download].download(self.__output)
         
     def show_progress_bar(self, stream, chunk, bytes_remaining):
         if (self.is_first):

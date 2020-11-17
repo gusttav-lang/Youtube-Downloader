@@ -8,54 +8,40 @@ from StreamLoader import StreamLoader
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        # Init
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.btn_download.clicked.connect(self.download)
-        self.ui.btn_preview.clicked.connect(self.preview)
-        self.ui.btn_directory.clicked.connect(self.find_directory)
         
         self.url = ''
         self.output = ''
         self.resolution = None
         self.audio_only = None
-        self.ui.le_url.textChanged.connect(self.set_url)
-        self.ui.le_output.textChanged.connect(self.set_output)
-        self.ui.rb_144.toggled.connect(self.resolution_filter_changed)
-        self.ui.rb_240.toggled.connect(self.resolution_filter_changed)
-        self.ui.rb_360.toggled.connect(self.resolution_filter_changed)
-        self.ui.rb_480.toggled.connect(self.resolution_filter_changed)
-        self.ui.rb_720.toggled.connect(self.resolution_filter_changed)
-        self.ui.rb_1080.toggled.connect(self.resolution_filter_changed)
-        self.ui.rb_all.toggled.connect(self.resolution_filter_changed)
-        self.ui.cb_audio.stateChanged.connect(self.audio_olny_changed)
         
+        self.fill_connects()
+        
+        #must create here, otherwise thread is destroyed too soon:
         self.download_thread = QThread()
         self.progress_dialog = None
         self.yt = None
-        self.ui.le_output.setText('C:/Users/gustt/OneDrive/Área de Trabalho') # apagar dps
-        self.ui.le_url.setText('https://www.youtube.com/watch?v=R5INkznXiEs&ab_channel=MaellMemes')
         
     def download(self):        
         self.yt = StreamLoader(self.url)
         download_dialog = DownloadList(self.yt.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only))
-        download_dialog.exec_()
-        
+        download_dialog.exec_()        
         item_for_download = download_dialog.currentItem                
         
         self.yt.set_resolution(self.resolution)
         self.yt.set_audio_only(self.audio_only)
         self.yt.set_output(self.output)
-        self.yt.set_item_for_download(item_for_download)
-        
+        self.yt.set_item_for_download(item_for_download)        
         
         self.progress_dialog = QProgressDialog() 
+        self.progress_dialog.setWindowTitle('Downloading')
+        self.progress_dialog.setCancelButton(None)
         self.yt.moveToThread(self.download_thread)
         self.download_thread.started.connect(self.yt.start_thread)  
         self.yt.finished.connect(self.download_thread.quit)
-        self.yt.yt.register_on_progress_callback(self.yt.show_progress_bar)          
-        self.progress_dialog.setLabelText('Downloading')
+        self.yt.yt.register_on_progress_callback(self.yt.show_progress_bar)
         self.yt.total_bytes.connect(self.progress_dialog.setMaximum)
         self.yt.bytes_remaining.connect(self.progress_dialog.setValue)
         self.progress_dialog.show()
@@ -102,6 +88,22 @@ class MainWindow(QMainWindow):
             self.audio_only = True
         else:
             self.audio_only = None # just cancel this filter         
+            
+    def fill_connects(self):        
+        self.ui.btn_download.clicked.connect(self.download)
+        self.ui.btn_preview.clicked.connect(self.preview)
+        self.ui.btn_directory.clicked.connect(self.find_directory)
+        
+        self.ui.le_url.textChanged.connect(self.set_url)
+        self.ui.le_output.textChanged.connect(self.set_output)
+        self.ui.rb_144.toggled.connect(self.resolution_filter_changed)
+        self.ui.rb_240.toggled.connect(self.resolution_filter_changed)
+        self.ui.rb_360.toggled.connect(self.resolution_filter_changed)
+        self.ui.rb_480.toggled.connect(self.resolution_filter_changed)
+        self.ui.rb_720.toggled.connect(self.resolution_filter_changed)
+        self.ui.rb_1080.toggled.connect(self.resolution_filter_changed)
+        self.ui.rb_all.toggled.connect(self.resolution_filter_changed)
+        self.ui.cb_audio.stateChanged.connect(self.audio_olny_changed)
    
        
     
