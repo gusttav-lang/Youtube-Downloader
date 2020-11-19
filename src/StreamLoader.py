@@ -30,9 +30,15 @@ class StreamLoader(QObject):
         self.__output = output
     
     def start_thread(self):
+        '''
+        Starts the download. Setters funcitons must be called before this
+        '''
         self.yt.streams.filter(resolution=self.__resolution, only_audio=self.__audio_only)[self.__item_for_download].download(self.__output)
         
     def show_progress_bar(self, stream, chunk, bytes_remaining):
+        '''
+        Emits the signals used in the progressBar
+        '''
         if (self.is_first):
             self.total_bytes.emit(bytes_remaining)
             self.file_size = bytes_remaining

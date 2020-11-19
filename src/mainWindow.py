@@ -2,7 +2,7 @@ from PySide2.QtWidgets import QMainWindow, QFileDialog, QProgressDialog
 from src.ui.mainWindow_ui import Ui_MainWindow
 from VideoPlayer import VideoPlayer
 from downloadList import DownloadList
-from PySide2.QtCore import QThread
+from PySide2.QtCore import QThread, QUrl
 from StreamLoader import StreamLoader
 
 
@@ -24,7 +24,12 @@ class MainWindow(QMainWindow):
         self.progress_dialog = None
         self.yt = None
         
-    def download(self):        
+    def download(self):    
+        '''
+        Download the youtube URL to the output directory.
+        '''
+        self.check_url_is_valid()
+        
         self.yt = StreamLoader(self.url)
         download_dialog = DownloadList(self.yt.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only))
         download_dialog.exec_()        
@@ -54,12 +59,19 @@ class MainWindow(QMainWindow):
         self.ui.sw_player.setCurrentWidget(newWidget)        
     
     def find_directory(self):
+        '''
+        Open a QFileDialog to search the output directory
+        '''
         dir = QFileDialog.getExistingDirectory(self, 
               self.tr("Open Directory"), self.tr("/home"))
         self.ui.le_output.setText(dir)
 
-    def check_url_is_valid(self):
-        pass # functions donwload and preview will use it
+    def check_url_is_valid(self):        
+        if QUrl(self.url).isValid():
+            return True
+        else:
+            print('url not valid')
+            return False
 
     def set_url(self, text : str):
         self.url = text
@@ -89,7 +101,10 @@ class MainWindow(QMainWindow):
         else:
             self.audio_only = None # just cancel this filter         
             
-    def fill_connects(self):        
+    def fill_connects(self):
+        '''
+        Makes the connects for the necessaries signals/slots
+        '''
         self.ui.btn_download.clicked.connect(self.download)
         self.ui.btn_preview.clicked.connect(self.preview)
         self.ui.btn_directory.clicked.connect(self.find_directory)

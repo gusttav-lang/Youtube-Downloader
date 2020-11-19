@@ -2,6 +2,9 @@ from PySide2.QtWidgets import QDialog, QListWidgetItem
 from src.ui.downloadList_ui import Ui_downloadList
 
 class DownloadList(QDialog):
+    '''
+    Dialog used to show the download options. User selects the wanted option
+    '''
     def __init__(self, videos_list):
         super().__init__()
         self.ui = Ui_downloadList()
@@ -16,5 +19,5 @@ class DownloadList(QDialog):
         self.currentItem = 0
         
     def download(self):
-        self.currentItem =self.ui.listWidget.currentRow()
+        self.currentItem = self.ui.listWidget.currentRow()
         self.close()
