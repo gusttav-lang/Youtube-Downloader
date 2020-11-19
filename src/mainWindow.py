@@ -1,4 +1,4 @@
-from PySide2.QtWidgets import QMainWindow, QFileDialog, QProgressDialog
+from PySide2.QtWidgets import QMainWindow, QFileDialog, QProgressDialog, QMessageBox
 from src.ui.mainWindow_ui import Ui_MainWindow
 from VideoPlayer import VideoPlayer
 from downloadList import DownloadList
@@ -28,12 +28,26 @@ class MainWindow(QMainWindow):
         '''
         Download the youtube URL to the output directory.
         '''
-        self.check_url_is_valid()
+        if (self.check_url_is_valid(self.url) == False or
+            self.check_url_is_valid(self.output) == False):
+            self.show_error_dialog('Invalid input')
+            return
         
-        self.yt = StreamLoader(self.url)
-        download_dialog = DownloadList(self.yt.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only))
+        try:
+            self.yt = StreamLoader(self.url)
+        except:
+            self.show_error_dialog('Invalid URL')
+
+        download_list = self.yt.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only)
+        if (len(download_list) == 0):
+            self.show_error_dialog('There is not any valid file with the '
+                                   'selected filter. Please updated it!')
+            return
+        download_dialog = DownloadList(download_list)
         download_dialog.exec_()        
-        item_for_download = download_dialog.currentItem                
+        item_for_download = download_dialog.currentItem   
+        if (download_dialog.download_pressed == False):
+            return
         
         self.yt.set_resolution(self.resolution)
         self.yt.set_audio_only(self.audio_only)
@@ -66,11 +80,11 @@ class MainWindow(QMainWindow):
               self.tr("Open Directory"), self.tr("/home"))
         self.ui.le_output.setText(dir)
 
-    def check_url_is_valid(self):        
+    def check_url_is_valid(self, url_to_validate : str):
+        '''Validate an URL. Can be either output directory or web address'''        
         if QUrl(self.url).isValid():
             return True
         else:
-            print('url not valid')
             return False
 
     def set_url(self, text : str):
@@ -120,5 +134,14 @@ class MainWindow(QMainWindow):
         self.ui.rb_all.toggled.connect(self.resolution_filter_changed)
         self.ui.cb_audio.stateChanged.connect(self.audio_olny_changed)
    
-       
+    def show_error_dialog(self, text : str):
+        '''
+        Show a error QMessageBox with text = text
+        '''
+        msg_box = QMessageBox()
+        msg_box.setWindowTitle("Error")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.setText(text)
+        msg_box.setIcon(QMessageBox.Critical)
+        msg_box.exec()
     

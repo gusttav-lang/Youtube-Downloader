@@ -17,7 +17,9 @@ class DownloadList(QDialog):
         self.ui.listWidget.setCurrentRow(0)
         self.ui.btn_download.clicked.connect(self.download)
         self.currentItem = 0
+        self.download_pressed = False
         
     def download(self):
         self.currentItem = self.ui.listWidget.currentRow()
+        self.download_pressed = True
         self.close()
