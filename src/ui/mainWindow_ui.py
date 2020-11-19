@@ -61,10 +61,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.btn_preview = QPushButton(self.gb_inputs)
-        self.btn_preview.setObjectName(u"btn_preview")
+        self.btn_watch = QPushButton(self.gb_inputs)
+        self.btn_watch.setObjectName(u"btn_watch")
 
-        self.horizontalLayout.addWidget(self.btn_preview)
+        self.horizontalLayout.addWidget(self.btn_watch)
 
         self.btn_download = QPushButton(self.gb_inputs)
         self.btn_download.setObjectName(u"btn_download")
@@ -160,7 +160,7 @@ class Ui_MainWindow(object):
         self.gb_inputs.setTitle(QCoreApplication.translate("MainWindow", u"Inputs", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"URL:", None))
         self.btn_directory.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.btn_preview.setText(QCoreApplication.translate("MainWindow", u"Preview", None))
+        self.btn_watch.setText(QCoreApplication.translate("MainWindow", u"Watch", None))
         self.btn_download.setText(QCoreApplication.translate("MainWindow", u"Download", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Directory output:", None))
         self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Filters", None))

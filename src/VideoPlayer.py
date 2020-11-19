@@ -12,7 +12,7 @@ class VideoPlayer(QtWidgets.QWidget):
 
         QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         self.playlist = QMediaPlaylist(self.player)
-        self.playlist.addMedia(QUrl('http://localhost:9000/youtube2mp4?url='+url))
+        self.playlist.addMedia(QUrl(url))
 
         self.video_widget = QVideoWidget()
         self.player.setVideoOutput(self.video_widget)
@@ -26,5 +26,10 @@ class VideoPlayer(QtWidgets.QWidget):
 
         self.player.play()
         QApplication.restoreOverrideCursor() 
-        print(self.player.state())
+        
+    def mousePressEvent(self, event):
+        if self.player.state() == QMediaPlayer.PausedState:
+            self.player. play()
+        else:
+            self.player.pause()
         

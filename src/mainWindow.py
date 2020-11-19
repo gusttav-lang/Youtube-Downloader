@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
             self.yt = StreamLoader(self.url)
         except:
             self.show_error_dialog('Invalid URL')
+            return
 
         download_list = self.yt.yt.streams.filter(resolution=self.resolution, only_audio=self.audio_only)
         if (len(download_list) == 0):
@@ -67,8 +68,11 @@ class MainWindow(QMainWindow):
         
         self.download_thread.start()
         
-    def preview(self):
-        newWidget = VideoPlayer(self.url)
+    def watch(self):
+        '''Plays a video after the download'''
+        file = QFileDialog.getOpenFileName(self, "Open", self.output, "mp4 file (*.mp4)")
+        file_name = file[0]
+        newWidget = VideoPlayer(file_name)
         self.ui.sw_player.addWidget(newWidget)
         self.ui.sw_player.setCurrentWidget(newWidget)        
     
@@ -81,8 +85,8 @@ class MainWindow(QMainWindow):
         self.ui.le_output.setText(dir)
 
     def check_url_is_valid(self, url_to_validate : str):
-        '''Validate an URL. Can be either output directory or web address'''        
-        if QUrl(self.url).isValid():
+        '''Validate an URL. Can be either output directory or web address'''
+        if QUrl(url_to_validate).isValid():
             return True
         else:
             return False
@@ -120,7 +124,7 @@ class MainWindow(QMainWindow):
         Makes the connects for the necessaries signals/slots
         '''
         self.ui.btn_download.clicked.connect(self.download)
-        self.ui.btn_preview.clicked.connect(self.preview)
+        self.ui.btn_watch.clicked.connect(self.watch)
         self.ui.btn_directory.clicked.connect(self.find_directory)
         
         self.ui.le_url.textChanged.connect(self.set_url)
