@@ -1,8 +1,0 @@
-ajustar player para após o download
-escrever documentação das funções
-
-validar:
--lista vazia antes do download
--url valida
--output valido
--arquivo existe no output

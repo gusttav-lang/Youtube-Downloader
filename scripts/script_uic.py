@@ -2,18 +2,7 @@ import sys
 import os
 
 
-"""
-Make sure that you are inside script folder when using the follow commands
-How to use:
-    python script_uic [.ui file name]
-        "this way the script will create .py relate to the .ui file specified"
-    python script_uic
-        "this way the script will create all .py for all .ui files"
-"""
-
-
 def update_ui(arguments):
-    # sys.argv[0] is always our file 'script_uic.py'
     if len(arguments) > 1:
         files = arguments[1:]
         for file in files:
