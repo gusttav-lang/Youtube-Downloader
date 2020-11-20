@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
         self.fill_connects()
         
         #must create here, otherwise thread is destroyed too soon:
-        self.download_thread = QThread()
+        self.download_thread = None
         self.progress_dialog = None
         self.yt = None
         
@@ -55,11 +55,12 @@ class MainWindow(QMainWindow):
         self.yt.set_output(self.output)
         self.yt.set_item_for_download(item_for_download)        
         
+        self.download_thread = QThread()
         self.progress_dialog = QProgressDialog() 
         self.progress_dialog.setWindowTitle('Downloading')
         self.progress_dialog.setCancelButton(None)
         self.yt.moveToThread(self.download_thread)
-        self.download_thread.started.connect(self.yt.start_thread)  
+        self.download_thread.started.connect(self.yt.start_thread)
         self.yt.finished.connect(self.download_thread.quit)
         self.yt.yt.register_on_progress_callback(self.yt.show_progress_bar)
         self.yt.total_bytes.connect(self.progress_dialog.setMaximum)

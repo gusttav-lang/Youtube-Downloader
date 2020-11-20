@@ -18,7 +18,7 @@ class StreamLoader(QObject):
         self.file_size = 0
         
     def set_resolution(self, resolution):
-        self.__esolution = resolution
+        self.__resolution = resolution
         
     def set_audio_only(self, audio_only):
         self.__audio_only = audio_only
